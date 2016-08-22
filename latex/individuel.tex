@@ -1,0 +1,979 @@
+% Document class: article with font size 11pt
+% ---------------
+\documentclass[11pt,a4paper]{article}
+
+\setlength{\textwidth}{165mm}
+\setlength{\textheight}{240mm}
+\setlength{\parindent}{0mm} % S{\aa} meget rykkes ind efter afsnit
+\setlength{\parskip}{\baselineskip}
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+\setlength{\hoffset}{-2.5mm}
+\setlength{\voffset}{0mm}
+\setlength{\footskip}{15mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+
+\usepackage[a4paper, hmargin={2.8cm, 2.8cm}, vmargin={2.5cm, 2.5cm}]{geometry}
+\usepackage[super]{nth}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{eso-pic} % \AddToShipoutPicture
+\usepackage{float} % This will allow precise picture placement, use [H].
+\usepackage{listings}
+\usepackage{color}
+\usepackage[titletoc,title]{appendix}
+
+% BEGIN REDESIGN OF LSTLISTING:
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+% END REDESIGN OF LSTLISTING
+
+
+% Call packages
+% ---------------
+\usepackage{comment} %Possible to comment larger sections
+%http://get-software.net/macros/latex/contrib/comment/comment.pdf
+\usepackage[T1]{fontenc} %oriented to output, that is, what fonts to use for printing characters.
+\usepackage[utf8]{inputenc} %allows the user to input accented characters directly from the keyboard
+
+%Support Windows TeXStudio
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+%http://mirrors.dotsrc.org/ctan/fonts/fourier-GUT/doc/latex/fourier/fourier-doc-en.pdf
+\usepackage[english]{babel}														     % Danish
+\usepackage[protrusion=true,expansion=true]{microtype}				                 % Better typography
+%http://www.khirevich.com/latex/microtype/
+\usepackage{amsmath,amsfonts,amsthm, amssymb}							 % Math packages
+\usepackage[pdftex]{graphicx} %puts to pdf and graphic
+%http://www.kwasan.kyoto-u.ac.jp/solarb6/usinggraphicx.pdf
+\usepackage{xcolor,colortbl}
+%http://mirrors.dotsrc.org/ctan/macros/latex/contrib/xcolor/xcolor.pdf
+%http://texdoc.net/texmf-dist/doc/latex/colortbl/colortbl.pdf
+\usepackage{tikz} %documentation http://www.ctan.org/pkg/pgf
+\usepackage{parskip} %http://www.ctan.org/pkg/parskip
+%http://tex.stackexchange.com/questions/51722/how-to-properly-code-a-tex-file-or-at-least-avoid-badness-10000
+%Never use \\ but instead press "enter" twice. See second website for more info
+
+% MATH -------------------------------------------------------------------
+\newcommand{\Real}{\mathbb R}
+\newcommand{\Complex}{\mathbb C}
+\newcommand{\Field}{\mathbb F}
+\newcommand{\RPlus}{[0,\infty)}
+%
+\newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+\newcommand{\essnorm}[1]{\norm{#1}_{\text{\rm\normalshape ess}}}
+\newcommand{\abs}[1]{\left\vert#1\right\vert}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\seq}[1]{\left<#1\right>}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\To}{\longrightarrow}
+\newcommand{\RE}{\operatorname{Re}}
+\newcommand{\IM}{\operatorname{Im}}
+\newcommand{\Poly}{{\cal{P}}(E)}
+\newcommand{\EssD}{{\cal{D}}}
+% THEOREMS ----------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+%
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}[section]
+%
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+
+\author{
+  \Large{
+    Brandt, Patrick Krøll - bwx155} \\
+   \\
+   %\Large{ }
+}
+\title{
+  \huge{OSM 2016 \\}
+  \Large{Operating Systems and Multiprogramming \\}
+  \vspace{3cm}
+  \Large{Take-Home Examination}
+}
+
+\begin{document}
+
+\AddToShipoutPicture*{\put(0,0){\includegraphics*[viewport=0 0 700 600]{include/natbio-farve}}}
+\AddToShipoutPicture*{\put(0,602){\includegraphics*[viewport=0 600 700 1600]{include/natbio-farve}}}
+
+\AddToShipoutPicture*{\put(0,0){\includegraphics*{include/nat-en}}}
+
+\clearpage\maketitle
+\thispagestyle{empty}
+\clearpage\newpage
+\thispagestyle{plain}
+
+%\tableofcontents
+%\pagebreak
+
+%<<--------------------------------------------------------------->>
+\subsection*{Introduction}
+
+
+
+
+%<<--------------------------------------------------------------->>
+\subsection*{Theoretical 1: Dining with Monitors}
+
+\includegraphics*[scale=0.33]{include/dining-philosophers-probleml.jpg}
+
+\subsubsection*{a: How far does the solution go? b: Describe the problem}
+
+The solution provided by the exam removes deadlock, because there is a check in place that makes sure other philosophers is not already using the limited resource before starting.
+
+It does not however solve the starvation problem; lets say we have 4 philosophers, one and three starts eating, now two and four can in theory risk starving forever, as if \textbf{only} one or three stops, neither two or four can start eating, however 3 can still start again since, either two or four is eating. Starvation.
+
+
+\subsubsection*{c: Modify Pseudo-code}
+
+In the test which a philosopher will run before eating; a testing for the hungry state on the left philosopher has been added.
+
+\begin{lstlisting}[caption={Philosopher Pseudo Code},label={lst:phil}]
+dining philosophers: monitor
+begin state: ()thinking; hungry; eating);
+    phil: array 0::N - 1 of state;
+    sel f : array 0::N - 1 of condition;
+    LEFT: array 0::N - 1 of int;
+    RIGHT: array 0::N - 1 of int;
+    procedure pickup(i : int);
+        begin phil[i] := hungry;
+            test(i);
+            if (phil[i] , eating) then sel f [i]:wait;
+        end pickup;
+    procedure putdown(i : int);
+        begin phil[i] := thinking;
+            test(LEFT[i]);
+            test(RIGHT[i]);
+        end putdown;
+    procedure test(i : int);
+        begin if ((phil[LEFT[i]] , eating) & (phil[RIGHT[i]] , eating) &
+        (phil[i] = hungry) & phil[LEFT[i], not(hungry)]) then
+            begin phil[i] := eating;
+                sel f [i]:signal;
+            end
+        end test;
+    for i := 0 step 1 until N - 1 do state[i] := thinking;
+    for i := 0 step 1 until N - 1 do LEFT[i] := (i + 1) mod N;
+    for i := 0 step 1 until N - 1 do RIGHT[i] := (i - 1) mod N;
+end dining philosophers
+\end{lstlisting}
+
+
+This addition will solve the starvation problem, however to assume this solution to be the best one would be rather naive, since its worst case running is in a circle.
+
+
+\subsection*{Theoretical 2: Pair-Up}
+
+\subsubsection*{a: Pseudo Code}
+
+Listing 2 provides a proposal to a solution for the Pair-Up problem, where we would like two processes to start simultaneously.
+
+\begin{lstlisting}[caption={Pair-Up Pseudo Code},label={lst:pu_pseudo}]
+semaphore = 0
+pairUp() {
+    if (semaphore = 0) {
+        procure(semaphore);
+    }
+    if (semaphore = -1) {
+        vacate(semaphore);
+    }
+}
+
+procure (semaphore) {
+    semaphore = semaphore - 1;
+    while (semaphore < 0) {
+        idle;
+    }
+}
+
+vacate(semaphore) {
+    semaphore = semaphore + 1;
+}
+\end{lstlisting}
+
+Then pairUp() is called, it will ensure that every time two processes have called pairUp, they will be started simultaneously.
+
+If one thread calls pairUp, it will be set to wait, until another thread comes along and calls pairUp, after with the first thread will be freed, and both threads will be started simultaneously.
+
+\subsubsection*{b: Does this implementation work for more than two?}
+
+To write an example, lets assume first one thread call pairUp, then two more threads calls pairUp, the one calling first will then be paired up with the first thread, and the third calling will then be waiting until a fourth thread calls pairUp. Therefore more than two threads can be run with this pairUp.
+
+
+\subsection*{Theoretical 3: UNIX-based file-systems}
+% https://digital-forensics.sans.org/blog/2008/12/24/understanding-indirect-blocks-in-unix-file-systems/
+\subsubsection*{a: Show inode contents after insertion of 5000 bytes}
+Given KU-id is bwx155, the number 155 has been used for pointer content.
+
+Firstly the pointer points towards 155, in this block, 4028 bytes can be stored, and the rest is sent to block 156.
+
+\begin{table}[]
+    \centering
+    \caption{Inode Contents after insertion of 5000 bytes}
+    \label{my-label}
+    \begin{tabular}{|l|}
+        \hline
+        155                    \\ \hline
+        166                    \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Empty                  \\ \hline
+        Single Indirect: Empty \\ \hline
+        Double Indirect: Empty \\ \hline
+        Triple Indirect: Empty \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection*{b: Show inode contents after insertion of 49156 bytes}
+Firstly 49152 bytes are stored in the first 12 direct blocks.
+
+Secondly the last four bytes is store in the Single-Direct block, which takes up a total of 4194304 bytes.
+
+\begin{table}[]
+    \centering
+    \caption{Inode Contents after insertion of 49156 bytes}
+    \label{my-label}
+    \begin{tabular}{|l|}
+        \hline
+        155                    \\ \hline
+        166                    \\ \hline
+        167                  \\ \hline
+        168                  \\ \hline
+        169                  \\ \hline
+        170                  \\ \hline
+        171                  \\ \hline
+        172                  \\ \hline
+        173                  \\ \hline
+        174                  \\ \hline
+        175                  \\ \hline
+        176                  \\ \hline
+        Single Indirect: 177 \\ \hline
+        Double Indirect: Empty \\ \hline
+        Triple Indirect: Empty \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection*{c: }
+
+Firstly N is calculated.
+
+Direct Mapped size is found: $ 1024 \cdot 12 = 49\:152 $
+
+Single indirect size is found: $ 4096 \cdot 1024 = 4\:194\:304 $
+
+Number of pointers are found: $ 4096 / 4 = 1024 $
+
+N is found: $ 49\:152 + 4\:194\:304 + 4 = 4\:243\:460$
+
+\textbf{i: Show contents of the inode}
+
+In Table 3 The first pointer in the single indirect block is 167, and the last is 1192.
+
+
+\begin{table}[]
+    \centering
+    \caption{Inode Contents after insertion of 49156 bytes}
+    \label{tbl:i}
+    \begin{tabular}{l|l|}
+        \hline
+        \multicolumn{1}{|l|}{Direct Mapped}   & 155   \\ \hline
+        & 156   \\ \cline{2-2} 
+        & 157   \\ \cline{2-2} 
+        & 158   \\ \cline{2-2} 
+        & 159   \\ \cline{2-2} 
+        & 160   \\ \cline{2-2} 
+        & 161   \\ \cline{2-2} 
+        & 162   \\ \cline{2-2} 
+        & 163   \\ \cline{2-2} 
+        & 164   \\ \cline{2-2} 
+        & 165   \\ \cline{2-2} 
+        & 166   \\ \hline
+        \multicolumn{1}{|l|}{Single Indirect} & 167   \\ \hline
+        \multicolumn{1}{|l|}{Double Indirect} & 1192  \\ \hline
+        \multicolumn{1}{|l|}{Triple Indirect} & Empty \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\textbf{ii: Show the contents of the double indirect block}
+
+The Double indirect block is located at 1302, containing a pointer to 1193, which contains a pointer to 1194, which contains the last 4 bytes.
+
+\textbf{iii: How many disk blocks does this file use in total?}
+
+The files uses a total of
+
+12 direct blocks +
+1 single indirect block + 1024 blocks pointed to in the single indirect block +
+1 double indirect block. + 1 block pointed to by the double indirect block +
+1 block pointed to by the block pointed to by the double indirect block.
+
+Therefore the total blocks not including the inode space will be
+
+12 + 1 + 1024 + 1 + 1 + 1 = 1040
+
+\subsubsection*{d: Calculate the maximum size without usage of triple indirect}
+
+By adding together the number of bytes each type in block displayed can have.
+
+The simplest way is 4Gb + 4Mb + 48Kb. But to be exact, lets calculate it in bytes.
+
+The Direct block points to 124KB blocks of data 49\:152 bytes.
+The Single indirect block points to 1024 pointers that point to 4KB blocks of data; 4\:194\:304 bytes.
+The Double Indirect block points to 1024 pointers that points to 1024 pointers each, pointing to 4Kb blocks 4294967296 bytes.
+
+Therefore the bytes pointed to in an inode filled up, including the double Indirect Block would be calculated the following way.
+
+49\:152 + 4\:194\:304 + 4\:294\:967\:296 = 4\:299\:210\:752
+
+
+\subsection*{Practical 1}
+
+Then making multi-threading in an operating system, it must be taken into consideration that threads can corrupt one another's data, if not coded properly.
+
+The purpose of this task is to allow different threads to speak with one another through a mailbox, which can be accessed with msg\_receive and msg\_send.
+
+
+\subsubsection*{About the Code}
+
+Firstly we have the mailbox\_by\_id which returns the mailbox number with the provided id.
+Secondly there is the find\_free\_mailbox\_entry which finds the first available mail slot.
+Thirdly then msg\_mailbox is run, if the given id is not already taken and makes sense, a new mailbox will be initialised.
+msg\_receive uses mailbox\_by\_id to find the index of the mailbox, also called model.
+msg\_send sends a message to a mailbox, with a pointer to the content and the size of that content.
+
+
+The code allows different threads to post to a messagebox.
+
+
+\subsubsection*{Testing}
+
+A test can be found in appendix, showing that different methods runs and does some of what it's supposed to.
+
+
+\subsection*{Practical 2: Read-Write Locks}
+
+The purpose is to make an api for the kudosOS which allows threads to communicate with one another.
+
+
+\subsubsection*{Progression}
+
+Firstly a struct including the variables needed to make the functionality was created and named rwlock, however this struct did not allow for content to be saved once a method such as rlock\_acquire was ended. The rwlock-struct was therefore used as return and input parameter for the different methods. This does however mean that the rules provided by the exam for how the methods should work is not met.
+
+
+\subsubsection*{Testing}
+
+The code has been tested with up to 16 read-locks and one write-lock in the same thread. Though this in no way reaches what the purpose of the assignment asks, at least there is a one-thread-halfway useless solution.
+
+The test provided in userland called rw\_own.c shows 16 readers starting and ending, followed by one writelock beaing locked an unlocked.
+
+
+
+
+\subsection*{Appendix}
+\subsubsection*{Practical 1}
+\begin{lstlisting}[language=C,caption={msg.c},label={lst:msg_c}]
+#include "proc/msg.h"
+
+#include "kernel/panic.h" // KERNEL_PANIC
+
+
+// PROCESS_MAX_PROCESSES are used since every mailbox has to have a corresponding process.
+msg_mailbox_control_t msg_table_of_mailboxes[MAX_MAILBOX];
+
+
+// Get model_number from mailbox id
+int mailbox_by_id(int mid) {
+for (int i = 0; i < MAX_MAILBOX; ++i)
+{
+// Find mailbox corresponding to mid.
+if (msg_table_of_mailboxes[i].mid == mid) {
+return i; // Return model_number
+}
+}
+
+return -1;
+}
+
+
+// Returns an empty slot in the msg_table_of_mailboxes.
+int get_empty_slot() {
+for (int i = 0; i < MAX_MAILBOX; ++i)
+{
+if (msg_table_of_mailboxes[i].mid == 0)
+return i;
+}
+return MSG_NO_MORE_MAILBOX_SLOTS;
+}
+
+// Creates a mailbox in the msg_table_of_mailboxes. Takes a mid which corresponds to the current process.
+int msg_mailbox(int mid) {
+int model_number = 0;
+
+// Check if mid has problems
+if (mid <= 0 || mid > MAX_MAILBOX)
+return MSG_INVALID_MAILBOX;
+
+if (mailbox_by_id(mid) != -1)
+return MSG_MAILBOX_ALREADY_EXISTS;
+
+// Get the model_number of a mailbox
+model_number = get_empty_slot();
+
+// Set the initial values for a mailbox
+msg_table_of_mailboxes[model_number].tid = thread_get_current_thread();
+msg_table_of_mailboxes[model_number].mid = mid;
+msg_table_of_mailboxes[model_number].state = MSG_FREE;
+
+return 0;
+}
+
+int msg_receive(int mid, void *destination) {
+// Check if mid has problems
+if (mid < 0 || mid > MAX_MAILBOX)
+return MSG_INVALID_MAILBOX;
+
+// Get the model_number of a mailbox
+int model_number = mailbox_by_id(mid);
+
+if (mailbox_by_id(mid) == -1)
+return MSG_INVALID_MAILBOX;
+
+interrupt_status_t intr_status = _interrupt_enable();
+spinlock_acquire(&msg_table_of_mailboxes[model_number].slock);
+msg_table_of_mailboxes[model_number].tid = thread_get_current_thread();
+msg_table_of_mailboxes[model_number].destination = destination;
+msg_table_of_mailboxes[model_number].state = MSG_WAIT;
+
+spinlock_release(&msg_table_of_mailboxes[model_number].slock);
+_interrupt_set_state(intr_status);
+
+sleepq_wake(&msg_table_of_mailboxes[model_number]);
+
+return 0;
+}
+
+int msg_send(int mid, size_t size, void *src) {
+if (mid < 0 || mid > MAX_MAILBOX)
+return MSG_INVALID_MAILBOX;
+
+if (size > MSG_MAX_SIZE)
+return MSG_TOO_BIG;
+
+// Get mailbox number
+int model_number = mailbox_by_id(mid);
+if (model_number == -1)
+return MSG_INVALID_MAILBOX;
+
+// ID of mailbox thread.
+TID_t tid = msg_table_of_mailboxes[model_number].tid;
+// Destinationin
+virtaddr_t target = (virtaddr_t) msg_table_of_mailboxes[model_number].destination;
+
+
+// Lock
+interrupt_status_t intr_status = _interrupt_disable();
+spinlock_acquire(&msg_table_of_mailboxes[model_number].slock);
+
+
+// Sleep Queue
+while(msg_table_of_mailboxes[model_number].state != MSG_WAIT) {
+sleepq_add(&msg_table_of_mailboxes[model_number]);
+spinlock_release(&msg_table_of_mailboxes[model_number].slock);
+thread_switch();
+spinlock_acquire(&msg_table_of_mailboxes[model_number].slock);
+}
+
+// Write from 'source' to memory
+vm_memwrite(thread_get_thread_entry(tid)-> pagetable,
+size,
+target,
+src);
+
+// Free up, after writing to memory.
+spinlock_release(&msg_table_of_mailboxes[model_number].slock);
+_interrupt_set_state(intr_status);
+
+msg_table_of_mailboxes[model_number].state = MSG_SENT;
+sleepq_wake(&msg_table_of_mailboxes[model_number]);
+
+return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C,caption={msg.h},label={lst:msg.h}]
+/* Header file for message passing subsystem.  See assignment text for
+the intended meaning of these functions. */
+
+#ifndef KUDOS_PROC_MSG
+#define KUDOS_PROC_MSG
+
+#include <stddef.h> // size_t
+
+#include "proc/syscall.h" /* For MSG_ constants. */
+#include "kernel/thread.h" // Threads
+#include "kernel/sleepq.h"// Sleep Queue
+#include "kernel/interrupt.h"// Interrupt status
+#include "kernel/spinlock.h" // Spin locks
+
+#define MAX_MAILBOX 42
+
+typedef enum {
+MSG_WAIT,
+MSG_SEND,
+MSG_FREE
+} msg_state_t;
+
+// Structure for mailbox.
+typedef struct {
+int mid;
+TID_t tid;
+void* destination;
+spinlock_t slock;
+msg_state_t state;
+} msg_mailbox_control_t;
+
+int msg_mailbox(int mid);
+
+int msg_receive(int mid, void *dest);
+
+int msg_send(int mid, size_t size, void *src);
+
+#endif
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=C,caption={Test msgtest.c Prints},label={lst:msgtest_c}]
+Starting initial program '[disk]msgtest.mips32'
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: 
+tmanager line: Hello number 0 from me!
+tmanager line: Hello number 1 from me!
+tmanager line: Hello number 2 from me!
+tmanager line: Hello number 3 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 0 from me!
+tmanager line: Hello number 1 from me!
+tmanager line: Hello number 2 from me!
+tmanager line: Hello number 3 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 1 from me!
+tmanager line: Hello number 2 from me!
+tmanager line: Hello number 3 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 0 from me!
+tmanager line: Hello number 1 from me!
+tmanager line: Hello number 2 from me!
+tmanager line: Hello number 3 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello number 4 from me!
+tmanager line: Hello nuIm bheavre  0n ofrw ojm omein!
+ed:tm a0n
+ageI rh alvie ne:n oHwe ljloio nneudmb:e r1 
+1 fI romh amvee! n
+otwm ajnaogiern eldi: n2e:
+IHe lhlavo ne unmobwe rj o2i nfreod:m  3me
+!I
+thamavnea gneorw  ljionie:n eHde:l lo 4n
+umber 3 from me!
+tmaAlnlag ecrl ileninte:s  jHoeilnledo .n
+uKernel: System shutdown started...
+
+\end{lstlisting}
+
+
+\subsubsection*{Practical 2}
+\begin{lstlisting}[language=C,caption={rwlock.c},label={lst:rwlock.c}]
+#include "rwlock.h"
+
+/* Creates a new rw lock and returns a handle to it */
+rwlock_t rwlock_create() {
+rwlock_t rwlock;
+
+rwlock.reader_count = 0;
+syscall_mutex_init(&rwlock.readlock);
+syscall_mutex_init(&rwlock.writelock);
+return rwlock;
+}
+
+/* Acquires the read-lock */
+rwlock_t rwlock_rlock_acquire(rwlock_t rwlock) {
+
+while(rwlock.writelock.taken == 1 || rwlock.reader_count == -1) {
+printf("waiting\n");
+syscall_cond_wait(&rwlock.cond, &rwlock.readlock);
+}
+
+if (rwlock.reader_count < 16 && rwlock.reader_count > 0) {
+rwlock.reader_count++;
+} else if (rwlock.reader_count == 0) {
+syscall_mutex_lock(&rwlock.readlock);
+rwlock.reader_count++;
+} else if (rwlock.reader_count >= 16) {
+printf("Only 16 threads assumed, anything happening from here on will fail\n");
+}
+
+return rwlock;
+}
+
+/* Releases the read-lock */
+rwlock_t rwlock_rlock_release(rwlock_t rwlock) {
+
+if (rwlock.reader_count > 1 && rwlock.reader_count <= 16) {
+rwlock.reader_count--;
+} else if (rwlock.reader_count == 1) {
+//release readlock if the thread happens to be the last reader
+rwlock.reader_count--;
+syscall_mutex_unlock(&rwlock.readlock);
+printf("Last reader has finished\n");
+syscall_cond_signal(&rwlock.cond);
+}
+
+return rwlock;
+}
+
+/* Acquires the write-lock */
+rwlock_t rwlock_wlock_acquire(rwlock_t rwlock) {
+
+if (rwlock.writelock.taken == 0) {
+syscall_mutex_lock(&rwlock.writelock);
+}
+
+
+while (rwlock.reader_count != 0 && rwlock.writelock.taken == 1) {
+printf("waiting\n");
+syscall_cond_wait(&rwlock.cond, &rwlock.writelock);
+}
+
+printf("Success acquired write-lock\n");
+
+return rwlock;
+}
+
+/* Releases the write-lock */
+rwlock_t rwlock_wlock_release(rwlock_t rwlock) {
+syscall_mutex_unlock(&rwlock.writelock);
+printf("Successfully released write-lock\n\n");
+return rwlock;
+}
+
+/* Destroys the read-write lock */
+int rwlock_destroy(rwlock_t rwlock) {
+//assure no thread is reading or writing, before freeing memory
+syscall_mutex_lock(&rwlock.writelock);
+
+while (rwlock.reader_count != 0 && rwlock.writelock.taken == 1){
+printf("waiting\n");
+syscall_cond_wait(&rwlock.cond, &rwlock.writelock);
+}
+
+free(&rwlock);
+return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C,caption={rwlock.h},label={lst:rwlock.h}]
+#ifndef RWLOCK_H
+#define RWLOCK_H
+
+#include "lib.h"
+
+typedef struct {
+int reader_count;
+cond_t cond;
+mutex_t readlock;
+mutex_t writelock;
+} rwlock_t;
+
+rwlock_t rwlock_create();
+
+rwlock_t rwlock_rlock_acquire(rwlock_t rwlock);
+
+rwlock_t rwlock_wlock_acquire(rwlock_t rwlock);
+
+rwlock_t rwlock_rlock_release(rwlock_t rwlock);
+
+rwlock_t rwlock_wlock_release(rwlock_t rwlock);
+
+int rwlock_destroy(rwlock_t rwlock);
+
+#endif /* RWLOCK_H */
+\end{lstlisting}
+
+\begin{lstlisting}[language=C,caption={Test: rw\_own.c},label={lst:rw_own.c}]
+#include "rwlock.h"
+#include "lib.h"
+
+#define N_THREADS (2)
+
+int main() {
+    //Create a readwrite-lock
+    rwlock_t rwlock = rwlock_create();
+    printf("Readers at beginning: %d\n\n", rwlock.reader_count);
+    
+    // Attempt to acquire ALL readlocks!
+    for (int i=1; i<=16; i++) {
+        rwlock = rwlock_rlock_acquire(rwlock);
+        printf("Acquire number: %d\n", i);
+        printf("read-lock acquired. reader_count: %d\n\n", rwlock.reader_count);
+    }
+    
+    // Attempt to release all locks
+    for (int i=0; i<16; i++) {
+        rwlock = rwlock_rlock_release(rwlock);
+        printf("Release number: %d\n", i);
+        printf("read-lock released. reader_count: %d\n\n", rwlock.reader_count);
+    }
+    
+    //Try to acquire and release the write-lock
+    rwlock = rwlock_wlock_acquire(rwlock);
+    rwlock = rwlock_wlock_release(rwlock);
+    
+    rwlock_destroy(rwlock);
+    
+    syscall_halt();
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Test rw\_own.c Prints},label={lst:p2testprint}]
+Readers at beginning: 0
+
+Acquire number: 1
+read-lock acquired. reader_count: 1
+
+Acquire number: 2
+read-lock acquired. reader_count: 2
+
+Acquire number: 3
+read-lock acquired. reader_count: 3
+
+Acquire number: 4
+read-lock acquired. reader_count: 4
+
+Acquire number: 5
+read-lock acquired. reader_count: 5
+
+Acquire number: 6
+read-lock acquired. reader_count: 6
+
+Acquire number: 7
+read-lock acquired. reader_count: 7
+
+Acquire number: 8
+read-lock acquired. reader_count: 8
+
+Acquire number: 9
+read-lock acquired. reader_count: 9
+
+Acquire number: 10
+read-lock acquired. reader_count: 10
+
+Acquire number: 11
+read-lock acquired. reader_count: 11
+
+Acquire number: 12
+read-lock acquired. reader_count: 12
+
+Acquire number: 13
+read-lock acquired. reader_count: 13
+
+Acquire number: 14
+read-lock acquired. reader_count: 14
+
+Acquire number: 15
+read-lock acquired. reader_count: 15
+
+Acquire number: 16
+read-lock acquired. reader_count: 16
+
+Release number: 0
+read-lock released. reader_count: 15
+
+Release number: 1
+read-lock released. reader_count: 14
+
+Release number: 2
+read-lock released. reader_count: 13
+
+Release number: 3
+read-lock released. reader_count: 12
+
+Release number: 4
+read-lock released. reader_count: 11
+
+Release number: 5
+read-lock released. reader_count: 10
+
+Release number: 6
+read-lock released. reader_count: 9
+
+Release number: 7
+read-lock released. reader_count: 8
+
+Release number: 8
+read-lock released. reader_count: 7
+
+Release number: 9
+read-lock released. reader_count: 6
+
+Release number: 10
+read-lock released. reader_count: 5
+
+Release number: 11
+read-lock released. reader_count: 4
+
+Release number: 12
+read-lock released. reader_count: 3
+
+Release number: 13
+read-lock released. reader_count: 2
+
+Release number: 14
+read-lock released. reader_count: 1
+
+Last reader has finished
+Release number: 15
+read-lock released. reader_count: 0
+
+Success acquired write-lock
+Successfully released write-lock
+\end{lstlisting}
+
+
+%\newpage
+%\bibliography{mybib}
+%\bibliographystyle{ieeetr}
+\end{document}
