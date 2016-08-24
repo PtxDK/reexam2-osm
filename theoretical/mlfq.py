@@ -14,6 +14,7 @@ TimeSlice = 32
 # Simulation Job Holder
 PreRunList = []
 
+Finished = []
 
 def AddJob(name, arrivalTime, execTime):
     aJobDict = {'name': name, 'arrivalTime': arrivalTime, 'execTimeLeft': execTime, 'execTimeUsed': 0, 'next': None}
@@ -23,13 +24,17 @@ def RunJob(dictElement, timeSlice):
     TimeLeft = int(dictElement['execTimeLeft'])
     if TimeLeft > timeSlice:
         newTimeLeft = TimeLeft-TimeSlice
-        dictElement['execTimeLeft': newTimeLeft ]
+        dictElement['execTimeLeft'] = newTimeLeft
+        Finished.append((dictElement['name'], timeSlice))
+    elif (TimeLeft == timeSlice):
+        Finished.append((dictElement['name'], timeSlice))
     elif (TimeLeft < timeSlice & TimeLeft > 0):
         print 'Reached else if'
     else:
-        print 'RunJob Error'
+        print dictElement
 
-        # DO STUFF WITH BREAKING!
+    # Do clean up (remove fix 'next' element)
+
 
 def RunQueues():
     # Do Queue1
@@ -52,5 +57,5 @@ if __name__ == "__main__":
     ImportJobs()
     RunQueues()
 
-
+    print Finished
 
