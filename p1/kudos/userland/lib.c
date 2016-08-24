@@ -772,10 +772,13 @@ free_block_t *free_list;
 
 byte heap[HEAP_SIZE];
 
+mutex_t heap_mutex;
+
 /* Initialise the heap - malloc et al won't work unless this is called
    first. */
 void heap_init()
 {
+  syscall_mutex_init(&heap_mutex);
   free_list = (free_block_t*) heap;
   free_list->size = HEAP_SIZE;
   free_list->next = NULL;
@@ -787,8 +790,12 @@ void heap_init()
 void *malloc(size_t size) {
   free_block_t *block;
   free_block_t **prev_p; /* Previous link so we can remove an element */
+  void *res = NULL;
+
+  syscall_mutex_lock(&heap_mutex);
+
   if (size == 0) {
-    return NULL;
+    goto ret;
   }
 
   /* Ensure block is big enough for bookkeeping. */
@@ -811,23 +818,31 @@ void *malloc(size_t size) {
       free_block_t *new_block =
         (free_block_t*)(((byte*)block)+block->size);
       new_block->size = size+sizeof(size_t);
-      return ((byte*)new_block)+sizeof(size_t);
+      res  = ((byte*)new_block)+sizeof(size_t);
+      goto ret;
     } else if (block->size >= size + sizeof(size_t)) {
       /* Block is big enough, but not so big that we can split
          it, so just return it */
       *prev_p = block->next;
-      return ((byte*)block)+sizeof(size_t);
+      res = ((byte*)block)+sizeof(size_t);
+      goto ret;
     }
     /* Else, check the next block. */
   }
 
   /* No heap space left. */
-  return NULL;
+ret:
+  syscall_mutex_unlock(&heap_mutex);
+  return res;
 }
 
 /* Return the block pointed to by ptr to the free pool. */
 void free(void *ptr)
 {
+
+  // Lock mutex when possible and continue
+  syscall_mutex_lock(&heap_mutex);
+
   if (ptr != NULL) { /* Freeing NULL is a no-op */
     free_block_t *block = (free_block_t*)((byte*)ptr-sizeof(size_t));
     free_block_t *cur_block;
@@ -862,10 +877,12 @@ void free(void *ptr)
           block->size += cur_block->size;
           block->next = cur_block->next;
         }
-        return;
+        goto ret;
       }
     }
   }
+  ret:
+  syscall_mutex_unlock(&heap_mutex); // Unlock mutex
 }
 
 void *calloc(size_t nmemb, size_t size)

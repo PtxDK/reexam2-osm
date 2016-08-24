@@ -2,7 +2,7 @@
 
 SOURCES :=  halt.c hw.c rw.c vuln0.c \
 						spawnn.c tenlines.c \
-						initthr.c threads.c
+						initthr.c threads.c mal_fre.c
 
 MIPS32INC = -I../kudos/lib/mips32/
 X86_64INC = -I../kudos/lib/x86_64/
