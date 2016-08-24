@@ -166,6 +166,7 @@ void merge_sem_init(merge_sem_t *s, int value) {
     Cond_init(&s->cond);
     Mutex_init(&s->lock);
     value = 0;
+    thread_check = 0;
 }
 
 void merge_sem_P1(merge_sem_t *s) {
