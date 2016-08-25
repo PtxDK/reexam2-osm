@@ -141,11 +141,6 @@
 %\tableofcontents
 %\pagebreak
 
-%<<--------------------------------------------------------------->>
-\subsection*{Introduction}
-
-
-
 
 %<<--------------------------------------------------------------->>
 \subsection*{Theoretical 1: Merge Semaphores}
@@ -193,39 +188,49 @@ The notation of Chapter 31 in OSTEP has been followed after best ability, [\ref{
 
 \subsection*{Theoretical 2: Simulating MLFQ}
 
+\begin{lstlisting}[caption={MLFQ Pseudo Code},label={lst:mlfq}]
 
-Since I have fallen out of the system multiple time during OSM, there is no exam number available to me on kunet, i have therefore chosen to use the number 42 as my exam-number in this task. Input for the program should be given in a file named \textbf{mlfq\_input.txt}
+\end{lstlisting}
+
 
 \subsection*{Theoretical 3: Simulating Buddy Allocation}
 
-...
+This can be sufficiently solved by using the following logic.
+
+\begin{itemize}
+\item Loop through all elements in fileblocks
+\item When block of big enough size is found and is also free
+\item Check if block is big enough for splitting
+\item Find block in fileBlocks and replace with one block, and add another block just after that block(or in practice, change the pointer from the recently changed block to point at the new block)
+\end{itemize}
+
+\begin{lstlisting}[caption={Buddy Allocation},label={lst:mlfq}]
+
+\end{lstlisting}
 
 
-\subsection*{Practical 1}
-
-.
-
-
-\subsubsection*{About the Code}
-
-..
-
-
-\subsubsection*{Testing}
-
-...
-
-\subsection*{Practical 2: Read-Write Locks}
-
+\subsection*{Practical 1: Thread-Safe malloc and free}
 
 \subsubsection*{Progression}
 
-
+Firstly I read through different files to get a hold of what was available, i chose which files to read using \textbf{grep -r searchstring}, it then became clear to me that a mutex lock was already available, so I simply used the given lock by first initializing it with \textbf{heap\_init()} and then use it in malloc and free. Many different files where read through though the mainly important one has proven to be proc/syscall.c and of course userland/lib.c.
 
 \subsubsection*{Testing}
 
+One test has been made which shows that the malloc allocates space according to the standard in KUDOS, and does so in while also switching between threads. I have concluded that my editings work by printing the memory address in test mem\_fre.c.
 
+\subsubsection*{Changes}
 
+To do a short write-up, the files which has been modified are
+\begin{itemize}
+    \item userland/lib.c
+    \item userland/Makefile
+    \item userland/mem\_fre.c
+\end{itemize}
+
+\subsection*{Practical 2: Read-Write Locks}
+
+Using the same approach as above, I did not manage to understand the implementation early enough to complete this task. A version of this is still submitted where I have added some of the things asked for in this task.
 
 
 \subsection*{Appendix}
