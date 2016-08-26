@@ -31,7 +31,7 @@ typedef intptr_t ssize_t;
 typedef uintptr_t size_t;
 typedef int pid_t;
 
-typedef void FILE;
+typedef int FILE;
 
 /* Default initial userland buffer size */
 #define BUFSIZE 64
