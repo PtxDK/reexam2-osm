@@ -186,26 +186,47 @@ void merge_sem_P2(merge_sem_t *s) {
 The notation of Chapter 31 in OSTEP has been followed after best ability, [\ref{lst:merge-sem}] shows nearly the exact same as seen in OSTEP\footnote{http://pages.cs.wisc.edu/~remzi/OSTEP/threads-sema.pdf} Figure 31.16 [Version 0.91] which almost supports the requirements for this task. merge\_sem\_t, merge\_sem\_init, merge\_sem\_P1 and merge\_sem\_P2 where only a slight modification has been made by adding thread\_check, which purpose is to ensure the constant switch between the two threads.
 
 
+\pagebreak
 \subsection*{Theoretical 2: Simulating MLFQ}
 
-\begin{lstlisting}[caption={MLFQ Pseudo Code},label={lst:mlfq}]
+Since no testing is required I have assumed that it is okay to write in pseudo code (This is after all the way I understand algorithms the first time)
 
-\end{lstlisting}
+The pseudo implementation shown in [\ref{lst:mlfq}] shows a loosely described algorithm of the 5 given rules, where it has been assumed that Round Robin(RR) is pre-defined, and that one can add jobs to the RR queue, start it, stop it, and add jobs to the queue, and that the queue can signal back when timeslices are used.
 
 
 \subsection*{Theoretical 3: Simulating Buddy Allocation}
 
-This can be sufficiently solved by using the following logic.
+This can be solved using the following logic.
 
 \begin{itemize}
 \item Loop through all elements in fileblocks
 \item When block of big enough size is found and is also free
 \item Check if block is big enough for splitting
-\item Find block in fileBlocks and replace with one block, and add another block just after that block(or in practice, change the pointer from the recently changed block to point at the new block)
+\item Find block in fileBlocks and replace with one block, and add another block just after that block(or in practice, change the pointer from the recently changed block to point at the second new block)
 \end{itemize}
 
-\begin{lstlisting}[caption={Buddy Allocation},label={lst:mlfq}]
-
+\begin{lstlisting}[caption={Buddy Allocation Algorithm},label={lst:sba}]
+SBA(allocSize) {
+    # Loop through all elements in memBlocks
+    for block in memBlocks {
+        # When block of big enough size is found and is also free
+        if ( block == free && block.size > allocSize ) {
+            # Check if block is big enough for splitting
+            splitCheck: # Label
+            # Split block if size is big enough to split
+            if block.size / 2 > allocSize {
+                block=>next.size = block.size / 2;
+                block.size = block.size / 2;
+            }
+            # Check if possible to split again ... again
+            if block.size / 2 > allocSize {
+                goto slitCheck
+            }
+            return block=>location;
+        }
+    }
+    return NULL; // There is no block avaliable of the required size
+}
 \end{lstlisting}
 
 
@@ -213,29 +234,241 @@ This can be sufficiently solved by using the following logic.
 
 \subsubsection*{Progression}
 
-Firstly I read through different files to get a hold of what was available, i chose which files to read using \textbf{grep -r searchstring}, it then became clear to me that a mutex lock was already available, so I simply used the given lock by first initializing it with \textbf{heap\_init()} and then use it in malloc and free. Many different files where read through though the mainly important one has proven to be proc/syscall.c and of course userland/lib.c.
+Firstly I read through different files to get a hold of what was available, i chose which files to read using \textbf{grep -r searchstring}, it then became clear to me that a mutex lock was already available, so I simply used the given lock by first initializing it with \textbf{heap\_init()} and then use it in malloc and free. Many different files where read through, though the mainly important one has proven to be \textbf{proc/syscall.c} and of course \textbf{userland/lib.c.}
+
+\subsubsection*{Code}
+
+Firstly the heap needs to be initialized with \textbf{heap\_init()}. KUDOS is then ready to begin using the heap within \textbf{malloc()} and \textbf{free()} and lock/unlock whenever switches can occur.
+
 
 \subsubsection*{Testing}
 
-One test has been made which shows that the malloc allocates space according to the standard in KUDOS, and does so in while also switching between threads. I have concluded that my editings work by printing the memory address in test mem\_fre.c.
+One test has been made which shows that the malloc allocates space according to the standard in KUDOS, and does so in while also switching between threads. I have concluded that my editings work by printing the memory address in test \textbf{mem\_fre.c}.
 
 \subsubsection*{Changes}
 
 To do a short write-up, the files which has been modified are
 \begin{itemize}
-    \item userland/lib.c
-    \item userland/Makefile
-    \item userland/mem\_fre.c
+    \item \textbf{userland/lib.c}
+    \item \textbf{userland/Makefile}
+    \item \textbf{userland/mem\_fre.c}
 \end{itemize}
+
+Note: In \textbf{Makefile}, \textbf{mal\_fre.c} where added to sources.
 
 \subsection*{Practical 2: Read-Write Locks}
 
 Using the same approach as above, I did not manage to understand the implementation early enough to complete this task. A version of this is still submitted where I have added some of the things asked for in this task.
 
+Nothing especially usefull has been completed in this task, see exact editings of this task at commit:  \url{https://github.com/PtxDK/reexam2-osm/commit/807393468846ece967a08aafc8af67392b1e4b58}
+
+A changelog can be found at \url{https://github.com/PtxDK/reexam2-osm}
+
+Note: Repository has been private during the exam, and is made public 27/8-16, 1 day after exam completion.
 
 \subsection*{Appendix}
 
+\begin{lstlisting}[caption={MLFQ Algorithm},label={lst:mlfq}]
 
+    MLFQ() {
+    
+    tick_counter = 0
+    timeSlice = 42
+    queues = [[],[],[],[],[]]
+    
+    typedef struct {
+        char name;
+        int arrivaltime;
+        int timeused;
+        int timeleft;
+    } job; // Holds information about each job
+    
+    // This runs whenever a new process requests time to CPU
+    IncommingJob(name, arrivalTime, execTime) {
+        queues[0].append([name, arrivalTime, execTime]);
+    } // Adds new job to top queue
+
+    // Finds job in queue and moves it one queue down.
+    queue_dec(job) {
+        queueNumber = queues.find(job);
+        
+        if (queueNumber < 5 && ququeNumber >= 0) {
+            queues[queueNumber+1].append(job);
+            queues[queuenumber].remove(job);
+        }
+    }
+    
+    // Run All Queues / Start Algorithm
+    restart_queue:
+    while ( queues[0] != Empty ) {
+        runRR(queues[0]) // Will goto queue_reset if more than 1000 ticks has passed
+    }
+ 
+    // runRR will call queue_dec() if timeslice is used and job should move to next queue
+    for queue in queues {
+        if ( queues[0] = queue ) { goto skipQueue1 }
+            runRR(queue)
+        skipQueue1:
+    }
+    
+    queue_reset: // Move all Jobs to Queue 1
+    
+    for job in queues[1] { queues[0].append(job); }
+    queues[1] = Empty;
+    
+    for job in queues[2] { queues[0].append(job); }
+    queues[2] = Empty;
+    
+    for job in queues[3] { queues[0].append(job); }
+    queues[3] = Empty;
+    
+    for job in queues[4] { queues[0].append(job); }
+    queues[4] = Empty;
+
+    tick_counter = 0;
+    goto restart_queue
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={P1: Lib.c Changes},label={lst:p1_lib.c}]
+mutex_t heap_mutex;
+
+void heap_init()
+{
+    syscall_mutex_init(&heap_mutex);
+    free_list = (free_block_t*) heap;
+    free_list->size = HEAP_SIZE;
+    free_list->next = NULL;
+}
+
+void *malloc(size_t size) {
+    free_block_t *block;
+    free_block_t **prev_p; /* Previous link so we can remove an element */
+    void *res = NULL;
+
+    syscall_mutex_lock(&heap_mutex);
+
+    if (size == 0) {
+        goto ret;
+    }
+
+    /* Ensure block is big enough for bookkeeping. */
+    size=MAX(MIN_ALLOC_SIZE,size);
+    /* Word-align */
+    if (size % 4 != 0) {
+        size &= ~3;
+        size += 4;
+    }
+
+    /* Iterate through list of free blocks, using the first that is
+    big enough for the request. */
+    for (block = free_list, prev_p = &free_list;
+         block;
+         prev_p = &(block->next), block = block->next) {
+        if ( (int)( block->size - size - sizeof(size_t) ) >=
+             (int)( MIN_ALLOC_SIZE+sizeof(size_t) ) ) {
+           /* Block is too big, but can be split. */
+           block->size -= size+sizeof(size_t);
+           free_block_t *new_block =
+            (free_block_t*)(((byte*)block)+block->size);
+           new_block->size = size+sizeof(size_t);
+           res  = ((byte*)new_block)+sizeof(size_t);
+           goto ret;
+         } else if (block->size >= size + sizeof(size_t)) {
+           /* Block is big enough, but not so big that we can split
+              it, so just return it */
+           *prev_p = block->next;
+           res = ((byte*)block)+sizeof(size_t);
+           goto ret;
+       }
+       /* Else, check the next block. */
+   }
+
+   /* No heap space left. */
+ret:
+   syscall_mutex_unlock(&heap_mutex);
+   return res;
+}
+
+void free(void *ptr) {
+
+    // Lock mutex when possible and continue
+    syscall_mutex_lock(&heap_mutex);
+
+    if (ptr != NULL) { /* Freeing NULL is a no-op */
+        free_block_t *block = (free_block_t*)((byte*)ptr-sizeof(size_t));
+        free_block_t *cur_block;
+        free_block_t *prev_block;
+
+        /* Iterate through the free list, which is sorted by
+           increasing address, and insert the newly freed block at the
+           proper position. */
+        for (cur_block = free_list, prev_block = NULL;
+             ;
+             prev_block = cur_block, cur_block = cur_block->next) {
+            if (cur_block > block || cur_block == NULL) {
+            /* Insert block here. */
+                if (prev_block == NULL) {
+                    free_list = block;
+                } else {
+                    prev_block->next = block;
+                }
+                block->next = cur_block;
+
+                if (prev_block != NULL &&
+                   (size_t)((byte*)block - (byte*)prev_block) == prev_block->size) {
+                    /* Merge with previous. */
+                    prev_block->size += block->size;
+                    prev_block->next = cur_block;
+                    block = prev_block;
+                }
+
+                if (cur_block != NULL &&
+                (size_t)((byte*)cur_block - (byte*)block) == block->size) {
+                    /* Merge with next. */
+                    block->size += cur_block->size;
+                    block->next = cur_block->next;
+                }
+                goto ret;
+            }
+        }
+    }
+ret:
+    syscall_mutex_unlock(&heap_mutex); // Unlock mutex
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={P1: mal\_fre.c},label={lst:p1-mal_fre.c}]
+#include "lib.h"
+
+void foo(void* a) {
+    a=a;
+    printf("FOOOOO\n");
+    int* allocated_space;
+    allocated_space = malloc(32);
+    printf("%d", allocated_space);
+    printf("BAAAAAR\n");
+    free(allocated_space);
+    syscall_exit(0);
+}
+
+int main() {
+
+    printf("Attempting to allocate 32 bytes 5 times..\n");
+
+    heap_init();
+
+    syscall_thread( &foo, NULL);
+    syscall_thread( &foo, NULL);
+    syscall_thread( &foo, NULL);
+    syscall_thread( &foo, NULL);
+    syscall_thread( &foo, NULL);
+
+    return 0;
+}
+
+\end{lstlisting}
 
 %\newpage
 %\bibliography{mybib}

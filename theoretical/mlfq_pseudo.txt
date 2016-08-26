@@ -5,27 +5,55 @@ MLFQ() {
     timeSlice = 42
     queues = [[],[],[],[],[]]
 
-    RunJob(job, timeslice) {
-        Send_To_CPU(job);
+    typedef struct {
+        char name;
+        int arrivaltime;
+        int timeused;
+        int timeleft;
+    } job; // Holds information about each job
 
+    // This runs whenever a new process requests time to CPU
+    IncommingJob(name, arrivalTime, execTime) {
+        queues[0].append([name, arrivalTime, execTime]);
+    } // Adds new job to top queue
+
+    queue_dec(job) {
+        // Finds job in queue and moves it one down.
+        queueNumber = queues.find(job);
+
+        if (queueNumber < 5 && ququeNumber >= 0) {
+            queues[queueNumber+1].append(job);
+            queues[queuenumber].remove(job);
+        }
     }
 
+    // Run All Queues / Start Algorithm
     restart_queue:
     while ( queues[0] != Empty ) {
-        for job in queues[0] {
-            RunJob(job, 42); # Do item in queue 1 with 42 timeslice
-        }
-    }
-    for queue in queues+1 {
-
+        runRR(queues[0]) // Will goto queue_reset if more than 1000 ticks has passed
     }
 
-    # Move all Jobs to Queue 1
-    if (tick_counter == 1000) {
-        for job in queues[1] {
-            queues[0].append(job);
-        }
+    // runRR will call queue_dec() if timeslice is used and job should move to next queue
+    for queue in queues {
+        if ( queues[0] = queue ) { goto skipQueue1 }
+        runRR(queue)
+        skipQueue1:
     }
+
+    queue_reset: // Move all Jobs to Queue 1
+
+    for job in queues[1] { queues[0].append(job); }
+    queues[1] = Empty;
+
+    for job in queues[2] { queues[0].append(job); }
+    queues[2] = Empty;
+
+    for job in queues[3] { queues[0].append(job); }
+    queues[3] = Empty;
+
+    for job in queues[4] { queues[0].append(job); }
+    queues[4] = Empty;
+
+    tick_counter = 0;
+    goto restart_queue
 }
-
-
