@@ -1,0 +1,31 @@
+
+MLFQ() {
+
+    tick_counter = 0
+    timeSlice = 42
+    queues = [[],[],[],[],[]]
+
+    RunJob(job, timeslice) {
+        Send_To_CPU(job);
+
+    }
+
+    restart_queue:
+    while ( queues[0] != Empty ) {
+        for job in queues[0] {
+            RunJob(job, 42); # Do item in queue 1 with 42 timeslice
+        }
+    }
+    for queue in queues+1 {
+
+    }
+
+    # Move all Jobs to Queue 1
+    if (tick_counter == 1000) {
+        for job in queues[1] {
+            queues[0].append(job);
+        }
+    }
+}
+
+
