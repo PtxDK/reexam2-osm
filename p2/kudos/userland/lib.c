@@ -342,11 +342,28 @@ void *memcpy(void *dest, const void *src, size_t n) {
 
 #ifdef PROVIDE_BASIC_IO
 
+// bwx155 changes starting
+
 int fputc(FILE *stream, char c)
 {
   // Currently stream == filehandle.
   return syscall_write((int)stream, &c, 1);
 }
+
+int fgetc(FILE *stream)
+{
+  char c;
+  // Currently stream == filehandle.
+  syscall_read((int)stream, &c, 1);
+  return c;
+}
+
+FILE *fopen(const char *pathname) {
+  syscall_open(pathname);
+  return 0;
+}
+
+// bwx155 changes ending
 
 /* Write c to standard output.  Returns a non-negative integer on
    success. */
@@ -360,14 +377,6 @@ int putc(char c)
 int puts(const char* s)
 {
   return syscall_write(FILEHANDLE_STDOUT, s, strlen(s));
-}
-
-int fgetc(FILE *stream)
-{
-  char c;
-  // Currently stream == filehandle.
-  syscall_read((int)stream, &c, 1);
-  return c;
 }
 
 /* Read character from standard input, without echoing.  Returns a
